@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <!-- <link rel='stylesheet' type='text/css' media='screen' href='/css/form-validation.css'>-->
+
+    <link href="/css/dataTables.bootstrap5.min" rel="stylesheet" media="all">
+
+    <link href="/css/font-awesome.min.css" rel="stylesheet" media="all">
+    <link href="/css/main.css" rel="stylesheet" media="all">
+    <link href="/css/select2.min.css" rel="stylesheet" media="all">
+    <link href="/css/daterangepicker.css" rel="stylesheet" media="all">
+
+    <title>Atendimento</title>
+
+</head>
+
+<body>
+    <div class="page-wrapper bg-img-1 p-t-100 p-b-50">
+        <div class="wrapper wrapper--w720">
+            <div class="logo-ctd card-header">
+                <img class="d-block mx-left mb-4" src="/img/logoCtd.png" alt="" width="169" height="80">
+            </div>
+
+            <div class="card card-3">
+
+                <div class="card-header card-3">
+                    <input class="inputs" type="hidden" id="custId" name="idChamada" value=<%=callId%>>
+                    <input class="inputs" type="hidden" id="status" name="status" value=<%=cliente.status%>>
+                    <input class="inputs" type="hidden" id="token" name="token" value=<%=token%>>
+
+                    <div class="row justify-content-md-center">
+                        <div class="col-3 col-sm-2">
+                            <div class="input-group">
+                                <label class="label">Data</label>
+                                <input class="input--style-2" type="text" id="currentDate" disabled>
+                                <i class="zmdi zmdi-pin input-group-symbol"></i>
+                            </div>
+                        </div>
+                        <div class="col-3 col-sm-2">
+                            <div class="input-group">
+                                <label class="label">Hora</label>
+                                <input class="input--style-2" type="text" id="currentTime" disabled>
+                                <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
+                            </div>
+                        </div>
+
+                        <div class="col-3 col-sm-3">
+                            <div class="input-group">
+                                <label class="label">Telefone</label>
+                                <input class="inputs input--style-2" type="text" name="numTelefone" id="numTelefone"
+                                    value="<%= numTelefone%>" disabled>
+                                <i class="zmdi zmdi-pin input-group-symbol"></i>
+                            </div>
+                        </div>
+
+                        <div class="col-3 col-sm-3">
+                            <div class="input-group mb-2">
+                                <label class="label">Protocolo</label>
+                                <input type="text" class="input--pesquisar" placeholder="-"
+                                    aria-describedby="button-addon2" value="<%= numProtocolo%>" name="numProtocolo"
+                                    id="numProtocolo">
+                                <button class="buttons btn-pesquisar" type="button" id="btn-pesquisar"
+                                    title="Pesquisar Protocolo"></button>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+                <div class="card-body" id="myTab">
+                    <ul class="tab-list nav nav-pills mb-1" id="pills-tab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link active" href="#" id="pills-atendimento-tab" data-bs-toggle="pill"
+                                data-bs-target="#pills-atendimento" type="button" role="tab"
+                                aria-controls="pills-atendimento">Atendimento</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" href="#" id="pills-historico-tab" data-bs-toggle="pill"
+                                data-bs-target="#pills-historico" type="button" role="tab"
+                                aria-controls="pills-historico">Histórico</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="pills-tabContent">
+                        <div class="tab-pane active" id="pills-atendimento" role="tabpanel"
+                            aria-labelledby="pills-atendimento-tab">
+                            <form method="POST" action="#">
+                                <div class="row row-space">
+                                    <div class="col-2 col-sm-2">
+                                        <div class="input-group">
+                                            <label class="label">*Nome</label>
+                                            <% if(cliente.status==200) {%>
+                                                <input class="input--style-1" type="text" name="nome" id="nome"
+                                                    placeholder="Nome do Solicitante" required="required"
+                                                    value="<%=cliente.msg[0].nome%>">
+                                                <i class="zmdi zmdi-pin input-group-symbol"></i>
+                                                <% } else {%>
+                                                    <input class="input--style-1" type="text" name="nome" id="nome"
+                                                        placeholder="Nome do Solicitante" required="required">
+                                                    <i class="zmdi zmdi-pin input-group-symbol"></i>
+                                                    <% } %>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-2 col-sm-2">
+                                        <div class="input-group">
+                                            <label class="label">Número Documento</label>
+                                            <% if(cliente.status==200) {%>
+                                                <input class="input--style-1" type="text" name="numDocumento"
+                                                    placeholder="999.999.999-99 ou 9.999.999-9"
+                                                    value="<%=cliente.msg[0].numDocumento%>">
+                                                <i class="zmdi zmdi-pin input-group-symbol"></i>
+                                                <% } else {%>
+                                                    <input class="input--style-1" type="text" name="numDocumento"
+                                                        placeholder="999.999.999-99 ou 9.999.999-9">
+                                                    <i class="zmdi zmdi-pin input-group-symbol"></i>
+                                                    <% } %>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row row-space">
+                                    <div class="col-3 col-sm-6">
+                                        <div class="input-group">
+                                            <label class="label">*E-mail</label>
+                                            <% if(cliente.status==200) {%>
+                                                <input class="input--style-1" type="email" name="email"
+                                                    placeholder="exemplo.email@provedor.com.br" required="required"
+                                                    value="<%=cliente.msg[0].email%>">
+                                                <i class="zmdi zmdi-pin input-group-symbol"></i>
+                                                <% } else {%>
+                                                    <input class="input--style-1" type="email" name="email"
+                                                        placeholder="exemplo.email@provedor.com.br" required="required">
+                                                    <i class="zmdi zmdi-pin input-group-symbol"></i>
+                                                    <% } %>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-3">
+                                        <div class="input-group">
+                                            <label class="label">*Telefone para Contato</label>
+                                            <% if(cliente.status==200) {%>
+                                                <input class="input--style-1" type="text" name="numTelefoneContato"
+                                                    placeholder="(XX)XXXX-XXXX" id="numTelefoneContato"
+                                                    required="required" value="<%=cliente.msg[0].numTelefoneContato%>">
+                                                <% } else {%>
+                                                    <input class="input--style-1" type="text" name="numTelefoneContato"
+                                                        placeholder="(XX)XXXX-XXXX" id="numTelefoneContato"
+                                                        required="required">
+                                                    <% } %>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-3">
+                                        <div class="input-group">
+                                            <label class="label">*Cidade</label>
+
+                                            <div class="rs-select2 js-select-simple select--no-search">
+                                                <select class="select2-search" name="car-group" id="cidades">
+                                                    <% if(cidades.length> 0) {%>
+                                                        <% cidades.forEach(function (cidade) {%>
+                                                            <% if(cliente.status==200) {%>
+                                                                <% if(cidade.nome.toUpperCase()==cliente.msg[0].localidade.toUpperCase())
+                                                                    {%>
+                                                                    <option selected>
+                                                                        <%=cidade.nome%>
+                                                                    <option>
+                                                                        <%} else { %>
+                                                                    <option>
+                                                                        <%=cidade.nome%>
+                                                                    </option>
+                                                                    <%}%>
+                                                                        <%} else { %>
+                                                                            <option>
+                                                                                <%=cidade.nome%>
+                                                                            </option>
+                                                                            <%}%>
+                                                                                <%})%>
+                                                                                    <%}%>
+
+                                                </select>
+                                                <div class="select-dropdown"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row row-space">
+                                    <div class="col-12">
+                                        <div class="input-group">
+                                            <label class="label">*Descrição da Solicitação</label>
+                                            <textarea class="input--style-1" rows="4" name="descricaoAtend"
+                                                required="required"></textarea>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-3 ">
+                                        <button class="buttons btn-submit" id="btn-salvar" type="submit">Salvar</button>
+                                    </div>
+                                    <div class="col-3 ">
+                                        <button class="buttons btn-submit" id="btn-abrirOs" type="submit">Abrir OS</button>
+                                    </div>
+
+
+                                </div>
+
+
+                            </form>
+                        </div>
+                        <div class="tab-pane" id="pills-historico" role="tabpanel"
+                            aria-labelledby="pills-historico-tab">
+                            <form method="POST" action="#">
+                                <div class="col-12">
+                                    <div class="input-group-table">
+                                        <table id="example" class="table table-striped" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>Data/Hora</th>
+                                                    <th>Id Chamada</th>
+                                                    <th>Protocolo</th>
+                                                    <th>Ação</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% if(historico.length> 0) {%>
+                                                    <% historico.forEach(function (hist) {%>
+
+                                                        <tr>
+                                                            <td>
+                                                                <%=hist.dataHoraAtend%>
+                                                            </td>
+                                                            <td>
+                                                                <%=hist.idChamada%>
+                                                            </td>
+                                                            <td>
+                                                                <%=hist.numProtocolo%>
+                                                            </td>
+                                                            <td>
+                                                                <div class="information">
+                                                                    <a class="buttons btn-information" href="#"
+                                                                        type="button" id="btn-<%=hist.id%>"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#exampleModal"></a>
+                                                                </div>
+                                                            </td>
+
+                                                        </tr>
+
+                                                        <%})%>
+                                                            <% } else {%>
+                                                                <tr>
+                                                                    <td colspan="4" style="text-align: center;">Sem
+                                                                        Histórico de Atendimento</td>
+                                                                </tr>
+                                                                <% } %>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <th>Data/Hora</th>
+                                                    <th>Id Chamada</th>
+                                                    <th>Protocolo</th>
+                                                    <th>Ação</th>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title fs-3 text-muted " id="exampleModalLabel">Detalhe da Solicitação</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="row row-space">
+                                        <div class="col-2">
+                                            <div class="mb-3">
+                                                <input type="text" class="inputs form-control text-uppercase" name="modal-id" id="modal-id" hidden>
+                                                <label for="message-text" class="col-form-label">Nome:</label>
+                                                <input type="text" class="inputs form-control text-uppercase" name="modal-nome"
+                                                id="modal-nome" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div class="mb-3">
+                                                <label for="message-text" class="col-form-label">Número Documento:</label>
+                                                <input type="text" class="inputs form-control text-uppercase" name="modal-numDocumento" id="modal-numDocumento" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row row-space">
+                                        <div class="col-6">
+                                            <div class="mb-6">
+                                                <label for="message-text" class="col-form-label">E-Mail:</label>
+                                                <input type="text" class="inputs form-control text-uppercase" name="modal-email"
+                                                id="modal-email" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="col-3">
+                                            <div class="mb-2">
+                                                <label for="message-text" class="col-form-label">Telefone para Contato:</label>
+                                                <input type="text" class="inputs form-control text-uppercase" name="modal-numTelefoneContato" id="modal-numTelefoneContato"
+                                                disabled>
+                                            </div>
+                                        </div>
+                                        <div class="col-3">
+                                            <div class="mb-2">
+                                                <label for="message-text" class="col-form-label">Cidade:</label>
+                                                <input type="text" class="inputs form-control text-uppercase" name="modal-localidade" id="modal-localidade" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row row-space">
+                                        <div class="col-12">
+                                            <div class="sm-12">
+                                                <label for="message-text" class="col-form-label">Descrição da Solicitação:</label>
+                                                <textarea class="inputs form-control text-uppercase" rows="6" name="modal-descricaoAtend" id="modal-descricaoAtend" disabled></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                               
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal Mensagens -->
+                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+                    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="staticBackdropLabel">
+                                    <label id="title-modal-msg"></label>
+                                </h4>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <label id="message-modal-msg"></label>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" id="button-modal-msg"
+                                    data-bs-dismiss="modal">OK</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script language="javascript" src="/axios.js"></script>
+    <script src="/AtendimentoController.js"></script>
+    <script src="/js/crmAtendimento.js"></script>
+    <script language="javascript" src="/js/bootstrap.min.js"></script>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery-3.5.1.js"></script>
+    <script src="/js/jquery.dataTables.min.js"></script>
+    <script src="/js/dataTables.bootstrap5.min.js"></script>
+    <script src="/js/select2.min.js"></script>
+    <script src="/js/jquery.validate.min.js"></script>
+    <script src="/js/jquery.validate.min.js"></script>
+    <script src="/js/jquery.bootstrap.wizard.min.js"></script>
+    <script src="/js/moment.min.js"></script>
+    <script src="/js/daterangepicker.js"></script>
+
+
+    <!-- Main JS-->
+    <script src="/js/global.js"></script>
+
+    <script>
+        // In your Javascript (external .js resource or <script> tag)
+        $(document).ready(function () {
+            $('#cidades').select2({
+                tags: true
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('#example').DataTable();
+        });
+    </script>
+
+</body>
+
+</html>

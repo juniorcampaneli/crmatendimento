@@ -1,0 +1,3 @@
+window.crmAtend =  new AtendimentoController();
+
+
